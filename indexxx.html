@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Construction Cost Estimator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+   * {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+  background-color: #f1f4f9;
+}
+
+h2 {
+  text-align: center;
+  padding: 30px 0 10px;
+  font-size: 28px;
+  color: #111827;
+}
+
+.main-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 20px;
+  gap: 30px;
+}
+
+.form-card, .result-card {
+  background-color: #ffffff;
+  padding: 30px;
+  /* 🔽 Increased min-height and removed rounded corners */
+  min-height: 500px;
+  border-radius: 0px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.07);
+  width: 100%;
+  max-width: 500px;
+}
+
+label {
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: block;
+  color: #374151;
+}
+
+select, input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 0px; /* square inputs */
+  border: 1px solid #d1d5db;
+  font-size: 16px;
+  margin-bottom: 20px;
+  outline: none;
+}
+
+select:focus, input:focus {
+  border-color: rgba(255, 94, 21, 1);
+}
+
+button {
+  background-color: rgba(255, 94, 21, 1);
+  color: white;
+  font-weight: 600;
+  padding: 12px;
+  width: 100%;
+  border: none;
+  border-radius: 0px; /* square button */
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: rgba(0, 18, 72, 1);
+}
+
+.history-btn {
+  margin-top: 10px;
+  background-color: #e5e7eb;
+  color: #111827;
+}
+
+.history-btn:hover {
+  background-color: #cbd5e1;
+}
+
+.result-card h3 {
+  margin-bottom: 15px;
+  color: #1f2937;
+}
+
+.result-card p {
+  font-size: 16px;
+  margin: 8px 0;
+  color: #374151;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #e5e7eb;
+  margin: 20px 0;
+}
+
+@media (min-width: 1000px) {
+  .form-card, .result-card {
+    flex: 1 1 45%;
+  }
+}
+
+  </style>
+</head>
+<body>
+
+  <h2>🏗️ Construction Cost Estimator (Pakistan)</h2>
+
+  <div class="main-wrapper">
+    
+    <!-- Left Form Card -->
+    <div class="form-card">
+      <form method="POST">
+        <label for="plotSize">Select Plot Size</label>
+        <select id="plotSize" name="plotSize" required>
+          <option value="120">120 Yards</option>
+          <option value="200">200 Yards</option>
+          <option value="500">500 Yards</option>
+        </select>
+
+        <label for="floors">Number of Floors</label>
+        <input type="number" id="floors" name="floors" value="1" min="1" required>
+
+        <button type="submit">Estimate Cost</button>
+      </form>
+
+      <form action="/history" method="GET">
+        <button class="history-btn" type="submit">📜 View Estimate History</button>
+      </form>
+    </div>
+
+    <!-- Right Result Card -->
+    {% if result %}
+    <div class="result-card">
+      <h3>📊 Material & Cost Estimate ({{ result.plot_size }} Yards × {{ result.floors }} Floor(s))</h3>
+      <p>🧱 Bricks: {{ result.bricks }} x Rs. {{ result.rates['brick'] }} = <b>Rs. {{ result.costs['brick'] }}</b></p>
+      <p>🏗️ Cement: {{ result.cement }} bags x Rs. {{ result.rates['cement'] }} = <b>Rs. {{ result.costs['cement'] }}</b></p>
+      <p>🔩 Steel: {{ result.steel }} kg x Rs. {{ result.rates['steel'] }} = <b>Rs. {{ result.costs['steel'] }}</b></p>
+      <p>🏖️ Sand: {{ result.sand }} cu ft x Rs. {{ result.rates['sand'] }} = <b>Rs. {{ result.costs['sand'] }}</b></p>
+      <hr>
+      <h3>💰 Total Construction Estimate: Rs. {{ result.total }}</h3>
+    </div>
+    {% endif %}
+
+  </div>
+
+</body>
+</html>
+
